@@ -1,0 +1,90 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1b2838;
+  color: white;
+}
+
+.navbar {
+  background-color: #171a21;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar nav {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.produtos {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  background-color: #2a475e;
+  padding: 15px;
+  border-radius: 8px;
+  width: 200px;
+  text-align: center;
+}
+
+.card img {
+  width: 100%;
+}
+
+.card button {
+  margin-top: 10px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.form-container {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 250px;
+}
+
+input, button {
+  padding: 8px;
+}
+
+.carrinho-page {
+  padding: 20px;
+}
+
+.carrinho-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.finalizar-btn {
+  margin-top: 15px;
+  padding: 8px;
+  cursor: pointer;
+}
