@@ -19,8 +19,20 @@ function App() {
   }, []);
 
   const produtos = [
-    { id: 1, nome: "Forza Horizon 5", preco: 79.9, imagem: forza5 },
-    { id: 2, nome: "Forza Horizon 6", preco: 99.9, imagem: forza6 },
+    {
+      id: 1,
+      nome: "Forza Horizon 5",
+      preco: 20,
+      imagem: forza5,
+      link: "https://pay.kiwify.com.br/OsnTq15",
+    },
+    {
+      id: 2,
+      nome: "Forza Horizon 6",
+      preco: 30,
+      imagem: forza6,
+      link: "https://pay.kiwify.com.br/KcN8QnT",
+    },
   ];
 
   function adicionarCarrinho(produto) {
@@ -35,13 +47,16 @@ function App() {
   const total = carrinho.reduce((acc, item) => acc + item.preco, 0);
 
   function finalizarCompra() {
-    alert("Compra finalizada com sucesso! 🎉");
-    setCarrinho([]);
+    if (carrinho.length === 0) return;
+
+    const produto = carrinho[0];
+    window.location.href = produto.link;
   }
 
   function criarConta(e, nome, email, senha) {
     e.preventDefault();
     const novoUsuario = { nome, email, senha };
+
     localStorage.setItem("usuario", JSON.stringify(novoUsuario));
     setUsuario(novoUsuario);
     navigate("/");
@@ -59,7 +74,7 @@ function App() {
       setUsuario(usuarioSalvo);
       navigate("/");
     } else {
-      alert("Email ou senha incorretos");
+      alert("Email ou senha incorretos ❌");
     }
   }
 
@@ -70,7 +85,6 @@ function App() {
 
   return (
     <div className="container">
-
       <header className="navbar">
         <h2>TECHYDALGO</h2>
 
@@ -83,7 +97,9 @@ function App() {
 
           {!usuario ? (
             <>
-              <Link to="/login"><FaUser /> Login</Link>
+              <Link to="/login">
+                <FaUser /> Login
+              </Link>
               <Link to="/criar-conta">Criar Conta</Link>
             </>
           ) : (
@@ -100,7 +116,6 @@ function App() {
       </header>
 
       <Routes>
-
         {/* HOME */}
         <Route
           path="/"
@@ -111,8 +126,9 @@ function App() {
                   <img src={produto.imagem} alt={produto.nome} />
                   <h3>{produto.nome}</h3>
                   <p>R$ {produto.preco.toFixed(2)}</p>
+
                   <button onClick={() => adicionarCarrinho(produto)}>
-                    Adicionar ao carrinho
+                    Adicionar ao carrinho 🛒
                   </button>
                 </div>
               ))}
@@ -126,7 +142,7 @@ function App() {
           element={
             usuario ? (
               <div className="carrinho-page">
-                <h2>Seu Carrinho</h2>
+                <h2>Seu Carrinho 🛒</h2>
 
                 {carrinho.length === 0 ? (
                   <p>Seu carrinho está vazio</p>
@@ -138,15 +154,18 @@ function App() {
                           {item.nome} - R$ {item.preco.toFixed(2)}
                         </span>
                         <button onClick={() => removerItem(index)}>
-                          Remover
+                          Remover ❌
                         </button>
                       </div>
                     ))}
 
                     <h3>Total: R$ {total.toFixed(2)}</h3>
 
-                    <button className="finalizar-btn" onClick={finalizarCompra}>
-                      Finalizar Compra
+                    <button
+                      className="finalizar-btn"
+                      onClick={finalizarCompra}
+                    >
+                      Ir para pagamento 💳
                     </button>
                   </>
                 )}
@@ -160,9 +179,11 @@ function App() {
           }
         />
 
-        <Route path="/criar-conta" element={<CriarConta criarConta={criarConta} />} />
+        <Route
+          path="/criar-conta"
+          element={<CriarConta criarConta={criarConta} />}
+        />
         <Route path="/login" element={<Login login={login} />} />
-
       </Routes>
     </div>
   );
@@ -177,10 +198,28 @@ function CriarConta({ criarConta }) {
     <div className="form-container">
       <h2>Criar Conta</h2>
       <form onSubmit={(e) => criarConta(e, nome, email, senha)}>
-        <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} required />
-        <button type="submit">Criar Conta</button>
+        <input
+          type="text"
+          placeholder="Nome"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          required
+        />
+        <button type="submit">Criar Conta 🚀</button>
       </form>
     </div>
   );
@@ -194,9 +233,21 @@ function Login({ login }) {
     <div className="form-container">
       <h2>Login</h2>
       <form onSubmit={(e) => login(e, email, senha)}>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} required />
-        <button type="submit">Entrar</button>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          required
+        />
+        <button type="submit">Entrar 🔑</button>
       </form>
     </div>
   );
