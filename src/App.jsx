@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { auth } from "./firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
 import "./App.css";
 
 import forza5 from "./assets/forza5.png";
@@ -12,10 +19,15 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const usuarioSalvo = localStorage.getItem("usuario");
-    if (usuarioSalvo) {
-      setUsuario(JSON.parse(usuarioSalvo));
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUsuario({ email: user.email });
+      } else {
+        setUsuario(null);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const produtos = [
@@ -48,38 +60,36 @@ function App() {
 
   function finalizarCompra() {
     if (carrinho.length === 0) return;
-
     const produto = carrinho[0];
     window.location.href = produto.link;
   }
 
-  function criarConta(e, nome, email, senha) {
+  async function criarConta(e, nome, email, senha) {
     e.preventDefault();
-    const novoUsuario = { nome, email, senha };
 
-    localStorage.setItem("usuario", JSON.stringify(novoUsuario));
-    setUsuario(novoUsuario);
-    navigate("/");
+    try {
+      await createUserWithEmailAndPassword(auth, email, senha);
+      alert("Conta criada com sucesso 🎉");
+      navigate("/");
+    } catch (error) {
+      alert("Erro: " + error.message);
+    }
   }
 
-  function login(e, email, senha) {
+  async function login(e, email, senha) {
     e.preventDefault();
-    const usuarioSalvo = JSON.parse(localStorage.getItem("usuario"));
 
-    if (
-      usuarioSalvo &&
-      usuarioSalvo.email === email &&
-      usuarioSalvo.senha === senha
-    ) {
-      setUsuario(usuarioSalvo);
+    try {
+      await signInWithEmailAndPassword(auth, email, senha);
+      alert("Login realizado 🚀");
       navigate("/");
-    } else {
+    } catch (error) {
       alert("Email ou senha incorretos ❌");
     }
   }
 
-  function sair() {
-    setUsuario(null);
+  async function sair() {
+    await signOut(auth);
     navigate("/");
   }
 
@@ -105,7 +115,7 @@ function App() {
           ) : (
             <>
               <span className="user-name">
-                <FaUser /> {usuario.nome}
+                <FaUser /> {usuario.email}
               </span>
               <button className="logout-btn" onClick={sair}>
                 <FaSignOutAlt /> Sair
@@ -116,7 +126,6 @@ function App() {
       </header>
 
       <Routes>
-        {/* HOME */}
         <Route
           path="/"
           element={
@@ -126,7 +135,6 @@ function App() {
                   <img src={produto.imagem} alt={produto.nome} />
                   <h3>{produto.nome}</h3>
                   <p>R$ {produto.preco.toFixed(2)}</p>
-
                   <button onClick={() => adicionarCarrinho(produto)}>
                     Adicionar ao carrinho 🛒
                   </button>
@@ -136,7 +144,6 @@ function App() {
           }
         />
 
-        {/* CARRINHO */}
         <Route
           path="/carrinho"
           element={
