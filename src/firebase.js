@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBFVOL-hFP5SRN-Zzhl2hGvAEWDoS5LGeU",
+  apiKey: "AIzaSyADWdtpqdQjgcKtL09QQoB0Pv-PYCWm6Ow",
   authDomain: "techydalgo.firebaseapp.com",
   projectId: "techydalgo",
   storageBucket: "techydalgo.firebasestorage.app",
   messagingSenderId: "192638237601",
-  appId: "1:192638237601:web:8d4bd59e4c8d873601a9e0"
+  appId: "1:192638237601:web:15e766b7ea14e35001a9e0"
 };
 
 const app = initializeApp(firebaseConfig);
