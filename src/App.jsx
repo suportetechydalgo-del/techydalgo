@@ -12,7 +12,7 @@ import "./App.css";
 
 import forza5 from "./assets/forza5.png";
 import forza6 from "./assets/forza6.png";
-import gta5 from "./assets/gta5.png"; 
+import gta5 from "./assets/gta5.png";
 
 function App() {
   const [carrinho, setCarrinho] = useState([]);
@@ -57,7 +57,7 @@ function App() {
       imagem: gta5,
       link: "https://pay.kiwify.com.br/SEULINKAQUI",
       texto:
-        "GTA 5 é um jogo de mundo aberto cheio de ação em Los Santos. Após a compra você receberá um código digital por email. Ative na plataforma correspondente (Rockstar ou Steam).",
+        "GTA 5 é um jogo de mundo aberto cheio de ação em Los Santos. Após a compra você receberá um código digital por email. Ative na Rockstar ou Steam.",
     },
   ];
 
@@ -96,7 +96,7 @@ function App() {
       await signInWithEmailAndPassword(auth, email, senha);
       alert("Login realizado 🚀");
       navigate("/");
-    } catch (error) {
+    } catch {
       alert("Email ou senha incorretos ❌");
     }
   }
@@ -139,6 +139,7 @@ function App() {
       </header>
 
       <Routes>
+        {/* HOME */}
         <Route
           path="/"
           element={
@@ -159,6 +160,7 @@ function App() {
           }
         />
 
+        {/* DETALHE */}
         <Route
           path="/produto/:id"
           element={
@@ -169,38 +171,43 @@ function App() {
           }
         />
 
+        {/* CARRINHO PROTEGIDO */}
         <Route
           path="/carrinho"
           element={
-            <div className="carrinho-page">
-              <h2>Seu Carrinho 🛒</h2>
+            usuario ? (
+              <div className="carrinho-page">
+                <h2>Seu Carrinho 🛒</h2>
 
-              {carrinho.length === 0 ? (
-                <p>Seu carrinho está vazio</p>
-              ) : (
-                <>
-                  {carrinho.map((item, index) => (
-                    <div key={index} className="carrinho-item">
-                      <span>
-                        {item.nome} - R$ {item.preco.toFixed(2)}
-                      </span>
-                      <button onClick={() => removerItem(index)}>
-                        Remover ❌
-                      </button>
-                    </div>
-                  ))}
+                {carrinho.length === 0 ? (
+                  <p>Seu carrinho está vazio</p>
+                ) : (
+                  <>
+                    {carrinho.map((item, index) => (
+                      <div key={index} className="carrinho-item">
+                        <span>
+                          {item.nome} - R$ {item.preco.toFixed(2)}
+                        </span>
+                        <button onClick={() => removerItem(index)}>
+                          Remover ❌
+                        </button>
+                      </div>
+                    ))}
 
-                  <h3>Total: R$ {total.toFixed(2)}</h3>
+                    <h3>Total: R$ {total.toFixed(2)}</h3>
 
-                  <button
-                    className="finalizar-btn"
-                    onClick={finalizarCompra}
-                  >
-                    Ir para pagamento 💳
-                  </button>
-                </>
-              )}
-            </div>
+                    <button onClick={finalizarCompra}>
+                      Ir para pagamento 💳
+                    </button>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="login-required">
+                <h2>Você precisa estar logado 🔒</h2>
+                <Link to="/login">Ir para Login</Link>
+              </div>
+            )
           }
         />
 
@@ -243,9 +250,9 @@ function CriarConta({ criarConta }) {
     <div className="form-container">
       <h2>Criar Conta</h2>
       <form onSubmit={(e) => criarConta(e, nome, email, senha)}>
-        <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} required />
+        <input type="text" placeholder="Nome" required onChange={(e) => setNome(e.target.value)} />
+        <input type="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)} />
+        <input type="password" placeholder="Senha" required onChange={(e) => setSenha(e.target.value)} />
         <button type="submit">Criar Conta 🚀</button>
       </form>
     </div>
@@ -260,8 +267,8 @@ function Login({ login }) {
     <div className="form-container">
       <h2>Login</h2>
       <form onSubmit={(e) => login(e, email, senha)}>
-        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} required />
+        <input type="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)} />
+        <input type="password" placeholder="Senha" required onChange={(e) => setSenha(e.target.value)} />
         <button type="submit">Entrar 🔑</button>
       </form>
     </div>
