@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_MESSAGING_ID",
-  appId: "SEU_APP_ID"
+  apiKey: "AIzaSyBFVOL-hFP5SRN-Zzhl2hGvAEWDoS5LGeU",
+  authDomain: "techydalgo.firebaseapp.com",
+  projectId: "techydalgo",
+  storageBucket: "techydalgo.firebasestorage.app",
+  messagingSenderId: "192638237601",
+  appId: "1:192638237601:web:8d4bd59e4c8d873601a9e0"
 };
 
 const app = initializeApp(firebaseConfig);
