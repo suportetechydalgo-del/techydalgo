@@ -13,6 +13,8 @@ import "./App.css";
 import forza5 from "./assets/forza5.png";
 import forza6 from "./assets/forza6.png";
 import gta5 from "./assets/gta5.png";
+import farming25 from "./assets/farming25.png";
+import gamepass from "./assets/gamepass.png";
 
 function App() {
   const [carrinho, setCarrinho] = useState([]);
@@ -27,7 +29,6 @@ function App() {
         setUsuario(null);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -57,7 +58,25 @@ function App() {
       imagem: gta5,
       link: "https://pay.kiwify.com.br/SEULINKAQUI",
       texto:
-        "GTA 5 é um jogo de mundo aberto cheio de ação em Los Santos. Após a compra você receberá um código digital por email. Ative na Rockstar ou Steam.",
+        "GTA 5 é um jogo de mundo aberto cheio de ação. Após a compra você receberá um código digital por email. Ative na Rockstar ou Steam.",
+    },
+    {
+      id: 4,
+      nome: "Farming Simulator 25",
+      preco: 25,
+      imagem: farming25,
+      link: "https://pay.kiwify.com.br/SEULINKAQUI",
+      texto:
+        "Farming Simulator 25 é um simulador agrícola com novos mapas e máquinas. Após a compra você receberá um código digital. Ative na plataforma correspondente.",
+    },
+    {
+      id: 5,
+      nome: "Gift Card Xbox Game Pass Ultimate 1 Mês Código Digital",
+      preco: 65,
+      imagem: gamepass,
+      link: "https://pay.kiwify.com.br/SEULINKAQUI",
+      texto:
+        "Gift Card Xbox Game Pass Ultimate válido por 1 mês. Após a compra você receberá um código digital por email. Ative em redeem.microsoft.com inserindo o código na sua conta Microsoft.",
     },
   ];
 
@@ -75,8 +94,7 @@ function App() {
 
   function finalizarCompra() {
     if (carrinho.length === 0) return;
-    const produto = carrinho[0];
-    window.location.href = produto.link;
+    window.location.href = carrinho[0].link;
   }
 
   async function criarConta(e, nome, email, senha) {
@@ -110,11 +128,9 @@ function App() {
     <div className="container">
       <header className="navbar">
         <h2>TECHYDALGO</h2>
-
         <nav>
           <Link to="/">Home</Link>
-
-          <Link to="/carrinho" className="cart-link">
+          <Link to="/carrinho">
             <FaShoppingCart /> {carrinho.length}
           </Link>
 
@@ -127,10 +143,10 @@ function App() {
             </>
           ) : (
             <>
-              <span className="user-name">
+              <span>
                 <FaUser /> {usuario.email}
               </span>
-              <button className="logout-btn" onClick={sair}>
+              <button onClick={sair}>
                 <FaSignOutAlt /> Sair
               </button>
             </>
@@ -139,7 +155,6 @@ function App() {
       </header>
 
       <Routes>
-        {/* HOME */}
         <Route
           path="/"
           element={
@@ -160,7 +175,6 @@ function App() {
           }
         />
 
-        {/* DETALHE */}
         <Route
           path="/produto/:id"
           element={
@@ -171,31 +185,25 @@ function App() {
           }
         />
 
-        {/* CARRINHO PROTEGIDO */}
         <Route
           path="/carrinho"
           element={
             usuario ? (
-              <div className="carrinho-page">
+              <div>
                 <h2>Seu Carrinho 🛒</h2>
-
                 {carrinho.length === 0 ? (
                   <p>Seu carrinho está vazio</p>
                 ) : (
                   <>
                     {carrinho.map((item, index) => (
-                      <div key={index} className="carrinho-item">
-                        <span>
-                          {item.nome} - R$ {item.preco.toFixed(2)}
-                        </span>
+                      <div key={index}>
+                        {item.nome} - R$ {item.preco.toFixed(2)}
                         <button onClick={() => removerItem(index)}>
-                          Remover ❌
+                          Remover
                         </button>
                       </div>
                     ))}
-
                     <h3>Total: R$ {total.toFixed(2)}</h3>
-
                     <button onClick={finalizarCompra}>
                       Ir para pagamento 💳
                     </button>
@@ -203,7 +211,7 @@ function App() {
                 )}
               </div>
             ) : (
-              <div className="login-required">
+              <div>
                 <h2>Você precisa estar logado 🔒</h2>
                 <Link to="/login">Ir para Login</Link>
               </div>
@@ -224,16 +232,14 @@ function App() {
 function ProdutoDetalhe({ produtos, adicionarCarrinho }) {
   const { id } = useParams();
   const produto = produtos.find((p) => p.id === Number(id));
-
   if (!produto) return <h2>Produto não encontrado</h2>;
 
   return (
-    <div className="produto-detalhe">
-      <img src={produto.imagem} alt={produto.nome} />
+    <div>
+      <img src={produto.imagem} alt={produto.nome} width="300" />
       <h2>{produto.nome}</h2>
-      <p><strong>Preço:</strong> R$ {produto.preco.toFixed(2)}</p>
+      <p>Preço: R$ {produto.preco.toFixed(2)}</p>
       <p>{produto.texto}</p>
-
       <button onClick={() => adicionarCarrinho(produto)}>
         Adicionar ao Carrinho 🛒
       </button>
@@ -247,13 +253,13 @@ function CriarConta({ criarConta }) {
   const [senha, setSenha] = useState("");
 
   return (
-    <div className="form-container">
+    <div>
       <h2>Criar Conta</h2>
       <form onSubmit={(e) => criarConta(e, nome, email, senha)}>
-        <input type="text" placeholder="Nome" required onChange={(e) => setNome(e.target.value)} />
-        <input type="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Senha" required onChange={(e) => setSenha(e.target.value)} />
-        <button type="submit">Criar Conta 🚀</button>
+        <input placeholder="Nome" onChange={(e) => setNome(e.target.value)} required />
+        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
+        <input placeholder="Senha" type="password" onChange={(e) => setSenha(e.target.value)} required />
+        <button type="submit">Criar Conta</button>
       </form>
     </div>
   );
@@ -264,12 +270,12 @@ function Login({ login }) {
   const [senha, setSenha] = useState("");
 
   return (
-    <div className="form-container">
+    <div>
       <h2>Login</h2>
       <form onSubmit={(e) => login(e, email, senha)}>
-        <input type="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Senha" required onChange={(e) => setSenha(e.target.value)} />
-        <button type="submit">Entrar 🔑</button>
+        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
+        <input placeholder="Senha" type="password" onChange={(e) => setSenha(e.target.value)} required />
+        <button type="submit">Entrar</button>
       </form>
     </div>
   );
