@@ -12,7 +12,7 @@ import "./App.css";
 
 import forza5 from "./assets/forza5.png";
 import forza6 from "./assets/forza6.png";
-import gta5 from "./assets/gta5.png"; // coloque a imagem gta5.png na pasta assets
+import gta5 from "./assets/gta5.png"; 
 
 function App() {
   const [carrinho, setCarrinho] = useState([]);
