@@ -12,6 +12,7 @@ import "./App.css";
 
 import forza5 from "./assets/forza5.png";
 import forza6 from "./assets/forza6.png";
+import gta5 from "./assets/gta5.png"; // coloque a imagem gta5.png na pasta assets
 
 function App() {
   const [carrinho, setCarrinho] = useState([]);
@@ -38,7 +39,7 @@ function App() {
       imagem: forza5,
       link: "https://pay.kiwify.com.br/OsnTq15",
       texto:
-        "Forza Horizon 5 é um jogo de corrida em mundo aberto com mapa no México. Após a compra você receberá um código digital por email. Para ativar, entre na sua conta Microsoft, vá até a Microsoft Store, clique em 'Resgatar código' e insira o código recebido.",
+        "Forza Horizon 5 é um jogo de corrida em mundo aberto no México. Após a compra você receberá um código digital por email. Ative na Microsoft Store em 'Resgatar código'.",
     },
     {
       id: 2,
@@ -47,12 +48,22 @@ function App() {
       imagem: forza6,
       link: "https://pay.kiwify.com.br/KcN8QnT",
       texto:
-        "Forza Horizon 6 traz novos carros, mapas e física aprimorada. O código será enviado automaticamente após a compra. Para ativar, acesse sua conta Microsoft no Xbox App ou Microsoft Store e resgate o código digital.",
+        "Forza Horizon 6 traz novos carros e mapas. Código enviado automaticamente após a compra. Ative via Xbox App ou Microsoft Store.",
+    },
+    {
+      id: 3,
+      nome: "GTA 5",
+      preco: 25,
+      imagem: gta5,
+      link: "https://pay.kiwify.com.br/SEULINKAQUI",
+      texto:
+        "GTA 5 é um jogo de mundo aberto cheio de ação em Los Santos. Após a compra você receberá um código digital por email. Ative na plataforma correspondente (Rockstar ou Steam).",
     },
   ];
 
   function adicionarCarrinho(produto) {
     setCarrinho([...carrinho, produto]);
+    alert("Adicionado ao carrinho 🛒");
   }
 
   function removerItem(index) {
@@ -142,14 +153,6 @@ function App() {
                   <img src={produto.imagem} alt={produto.nome} />
                   <h3>{produto.nome}</h3>
                   <p>R$ {produto.preco.toFixed(2)}</p>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      adicionarCarrinho(produto);
-                    }}
-                  >
-                    Adicionar ao carrinho 🛒
-                  </button>
                 </div>
               ))}
             </div>
@@ -158,48 +161,46 @@ function App() {
 
         <Route
           path="/produto/:id"
-          element={<ProdutoDetalhe produtos={produtos} />}
+          element={
+            <ProdutoDetalhe
+              produtos={produtos}
+              adicionarCarrinho={adicionarCarrinho}
+            />
+          }
         />
 
         <Route
           path="/carrinho"
           element={
-            usuario ? (
-              <div className="carrinho-page">
-                <h2>Seu Carrinho 🛒</h2>
+            <div className="carrinho-page">
+              <h2>Seu Carrinho 🛒</h2>
 
-                {carrinho.length === 0 ? (
-                  <p>Seu carrinho está vazio</p>
-                ) : (
-                  <>
-                    {carrinho.map((item, index) => (
-                      <div key={index} className="carrinho-item">
-                        <span>
-                          {item.nome} - R$ {item.preco.toFixed(2)}
-                        </span>
-                        <button onClick={() => removerItem(index)}>
-                          Remover ❌
-                        </button>
-                      </div>
-                    ))}
+              {carrinho.length === 0 ? (
+                <p>Seu carrinho está vazio</p>
+              ) : (
+                <>
+                  {carrinho.map((item, index) => (
+                    <div key={index} className="carrinho-item">
+                      <span>
+                        {item.nome} - R$ {item.preco.toFixed(2)}
+                      </span>
+                      <button onClick={() => removerItem(index)}>
+                        Remover ❌
+                      </button>
+                    </div>
+                  ))}
 
-                    <h3>Total: R$ {total.toFixed(2)}</h3>
+                  <h3>Total: R$ {total.toFixed(2)}</h3>
 
-                    <button
-                      className="finalizar-btn"
-                      onClick={finalizarCompra}
-                    >
-                      Ir para pagamento 💳
-                    </button>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div className="login-required">
-                <h2>Você precisa estar logado 🔒</h2>
-                <Link to="/login">Ir para Login</Link>
-              </div>
-            )
+                  <button
+                    className="finalizar-btn"
+                    onClick={finalizarCompra}
+                  >
+                    Ir para pagamento 💳
+                  </button>
+                </>
+              )}
+            </div>
           }
         />
 
@@ -213,13 +214,11 @@ function App() {
   );
 }
 
-function ProdutoDetalhe({ produtos }) {
+function ProdutoDetalhe({ produtos, adicionarCarrinho }) {
   const { id } = useParams();
   const produto = produtos.find((p) => p.id === Number(id));
 
-  if (!produto) {
-    return <h2>Produto não encontrado</h2>;
-  }
+  if (!produto) return <h2>Produto não encontrado</h2>;
 
   return (
     <div className="produto-detalhe">
@@ -227,6 +226,10 @@ function ProdutoDetalhe({ produtos }) {
       <h2>{produto.nome}</h2>
       <p><strong>Preço:</strong> R$ {produto.preco.toFixed(2)}</p>
       <p>{produto.texto}</p>
+
+      <button onClick={() => adicionarCarrinho(produto)}>
+        Adicionar ao Carrinho 🛒
+      </button>
     </div>
   );
 }
