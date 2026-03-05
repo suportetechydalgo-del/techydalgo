@@ -81,7 +81,7 @@ function App() {
       preco: 25,
       imagem: spiderman2,
       link: "https://pay.kiwify.com.br/EJccf0T",
-      texto: "Jogo Marvel´s Spider-man 2, tenha a cidade de Nova York inteira dentro do jogo"
+      texto: "Jogo Marvels Spider-man 2, tenha a cidade de Nova York inteira dentro do jogo"
     },
   ];
 
