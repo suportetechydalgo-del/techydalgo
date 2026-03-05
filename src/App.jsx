@@ -1,6 +1,19 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate, useParams } from "react-router-dom";
-import { FaShoppingCart, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { 
+  FaShoppingCart, 
+  FaUser, 
+  FaSignOutAlt, 
+  FaRocket, 
+  FaShieldAlt, 
+  FaPlus,
+  FaCheckCircle,
+  FaStar,
+  FaGlobe,
+  FaKey
+} from "react-icons/fa";
+// Importando o ícone de cesta específico (estilo shopping)
+import { FaBasketShopping } from "react-icons/fa6"; 
 import { auth } from "./firebase";
 import {
   createUserWithEmailAndPassword,
@@ -10,88 +23,36 @@ import {
 } from "firebase/auth";
 import "./App.css";
 
+// Imports de Imagens
 import forza5 from "./assets/forza5.png";
 import forza6 from "./assets/forza6.png";
 import gta5 from "./assets/gta5.png";
 import farming25 from "./assets/farming25.png";
 import gamepass from "./assets/gamepass.png";
+import spiderman2 from "./assets/spiderman2.png";
+import rdr2 from "./assets/rdr2.png";
 
 function App() {
   const [carrinho, setCarrinho] = useState([]);
   const [usuario, setUsuario] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUsuario({ email: user.email });
-      } else {
-        setUsuario(null);
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
   const produtos = [
-    {
-      id: 1,
-      nome: "Forza Horizon 5",
-      preco: 20,
-      imagem: forza5,
-      link: "https://pay.kiwify.com.br/OsnTq15",
-      texto: "Código digital enviado automaticamente após pagamento.",
-    },
-    {
-      id: 2,
-      nome: "Pré-vendaForza Horizon 6",
-      preco: 30,
-      imagem: forza6,
-      link: "https://pay.kiwify.com.br/KcN8QnT",
-      texto: "Código digital enviado automaticamente após pagamento.",
-    },
-    {
-      id: 3,
-      nome: "GTA 5",
-      preco: 25,
-      imagem: gta5,
-      link: "https://pay.kiwify.com.br/SEULINKAQUI",
-      texto: "Código digital enviado automaticamente após pagamento.",
-    },
-    {
-      id: 4,
-      nome: "Farming Simulator 25",
-      preco: 25,
-      imagem: farming25,
-      link: "https://pay.kiwify.com.br/U1tz1rD",
-      texto: "Código digital enviado automaticamente após pagamento.",
-    },
-    {
-      id: 5,
-      nome: "Xbox Game Pass Premium Trial - 1 Month",
-      preco: 30,
-      imagem: gamepass,
-      link: "https://kiwify.app/s6lSUqa",
-      texto: "Xbox Game Pass Premium Trial - 1 Month - envio automático.",
-    },
+    { id: 1, nome: "Forza Horizon 5", preco: 20, imagem: forza5, link: "https://pay.kiwify.com.br/OsnTq15", texto: "Código digital enviado automaticamente." },
+    { id: 2, nome: "Forza Horizon 6 - Pré venda", preco: 14.99, imagem: forza6, link: "https://pay.kiwify.com.br/KcN8QnT", texto: "Você receberá uma Key e um programa da STM para ativar a licença." },
+    { id: 3, nome: "GTA 5", preco: 25, imagem: gta5, link: "https://pay.kiwify.com.br/SEULINKAQUI", texto: "Código digital automático." },
+    { id: 4, nome: "Farming Simulator 25", preco: 25, imagem: farming25, link: "https://pay.kiwify.com.br/U1tz1rD", texto: "Entrega garantida." },
+    { id: 5, nome: "Xbox Game Pass Trial", preco: 30, imagem: gamepass, link: "https://kiwify.app/s6lSUqa", texto: "1 Mês de assinatura." },
+    { id: 6, nome: "Marvel's Spider-Man 2", preco: 25, imagem: spiderman2, link: "https://pay.kiwify.com.br/EJccf0T", texto: "Versão digital imediata." },
+    { id: 7, nome: "Red Dead Redemption 2", preco: 30, imagem: rdr2, link: "https://pay.kiwify.com.br/SEULINKAQUI", texto: "Versão digital completa." },
   ];
 
-  function adicionarCarrinho(produto) {
-    setCarrinho([...carrinho, produto]);
-    alert("Adicionado ao carrinho 🛒");
-  }
-
-  function removerItem(index) {
-    const novo = carrinho.filter((_, i) => i !== index);
-    setCarrinho(novo);
-  }
-
-  const total = carrinho.reduce((acc, item) => acc + item.preco, 0);
-
-  function finalizarCompra() {
-    if (carrinho.length === 0) return;
-    window.location.href = carrinho[0].link;
-  }
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUsuario(user ? { email: user.email } : null);
+    });
+    return () => unsubscribe();
+  }, []);
 
   async function criarConta(e, nome, email, senha) {
     e.preventDefault();
@@ -99,9 +60,7 @@ function App() {
       await createUserWithEmailAndPassword(auth, email, senha);
       alert("Conta criada 🎉");
       navigate("/");
-    } catch (error) {
-      alert(error.message);
-    }
+    } catch (error) { alert(error.message); }
   }
 
   async function login(e, email, senha) {
@@ -110,236 +69,195 @@ function App() {
       await signInWithEmailAndPassword(auth, email, senha);
       alert("Login realizado 🚀");
       navigate("/");
-    } catch {
-      alert("Erro no login");
-    }
+    } catch { alert("Erro no login"); }
   }
 
-  async function sair() {
-    await signOut(auth);
-  }
+  const adicionarCarrinho = (p) => { setCarrinho([...carrinho, p]); alert("Adicionado! 🛒"); };
+  const removerItem = (index) => setCarrinho(carrinho.filter((_, i) => i !== index));
+  const finalizarCompra = () => { if (carrinho.length > 0) window.location.href = carrinho[0].link; };
 
   return (
     <div className="container">
-
       <header className="navbar">
-        <h2 
-          style={{ cursor: "pointer" }} 
-          onClick={() => navigate("/")}
-        >
-          TECHYDALGO
-        </h2>
-
+        <h2 onClick={() => navigate("/")} style={{ cursor: "pointer" }}>TECHYDALGO</h2>
         <nav>
-          <Link to="/como-funciona">Como funciona</Link>
-
-          <Link to="/carrinho">
-            <FaShoppingCart /> {carrinho.length}
+          <Link to="/">Home</Link>
+          <Link to="/carrinho" className="cart-link">
+            <FaShoppingCart /> <span>{carrinho.length}</span>
           </Link>
-
           {!usuario ? (
-            <>
-              <Link to="/login">
-                <FaUser /> Login
-              </Link>
-              <Link to="/criar-conta">Criar Conta</Link>
-            </>
+            <><Link to="/login" className="login-btn"><FaUser /> Login</Link></>
           ) : (
-            <>
-              <span>
-                <FaUser /> {usuario.email}
-              </span>
-              <button onClick={sair}>
-                <FaSignOutAlt /> Sair
-              </button>
-            </>
+            <><span className="user-email">{usuario.email}</span><button onClick={() => signOut(auth)} className="btn-sair">Sair</button></>
           )}
         </nav>
       </header>
 
       <Routes>
-
-        {/* HOME */}
-        <Route
-          path="/"
-          element={
-            <div>
-
-              <div style={{
-                background: "#111",
-                padding: "40px",
-                textAlign: "center",
-                borderRadius: "10px",
-                marginBottom: "40px"
-              }}>
-                <h1 style={{ color: "#00e676" }}>
-                  Jogos Digitais com Entrega Imediata 🎮
-                </h1>
-                <p>
-                  Compra segura • Código automático • Suporte rápido
-                </p>
+        <Route path="/" element={
+          <div className="produtos animacao-entrada">
+            {produtos.map(p => (
+              <div key={p.id} className="card" onClick={() => navigate(`/produto/${p.id}`)}>
+                <img src={p.imagem} alt={p.nome} />
+                <div className="card-info">
+                  <h3>{p.nome}</h3>
+                  <p className="price">R$ {p.preco.toFixed(2)}</p>
+                </div>
               </div>
+            ))}
+          </div>
+        } />
 
-              <div className="produtos">
-                {produtos.map((produto) => (
-                  <div
-                    key={produto.id}
-                    className="card"
-                    onClick={() => navigate(`/produto/${produto.id}`)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <img src={produto.imagem} alt={produto.nome} />
-                    <h3>{produto.nome}</h3>
-                    <p style={{ color: "#00e676", fontWeight: "bold" }}>
-                      R$ {produto.preco.toFixed(2)}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          }
-        />
-
-        <Route
-          path="/produto/:id"
-          element={
-            <ProdutoDetalhe
-              produtos={produtos}
-              adicionarCarrinho={adicionarCarrinho}
-            />
-          }
-        />
-
-        <Route
-          path="/carrinho"
-          element={
-            usuario ? (
-              <div>
-                <h2>Seu Carrinho</h2>
-
-                {carrinho.length === 0 ? (
-                  <p>Seu carrinho está vazio</p>
-                ) : (
-                  <>
-                    {carrinho.map((item, index) => (
-                      <div key={index}>
-                        {item.nome} - R$ {item.preco}
-                        <button onClick={() => removerItem(index)}>
-                          Remover
-                        </button>
+        <Route path="/produto/:id" element={<ProdutoDetalhe produtos={produtos} adicionarCarrinho={adicionarCarrinho} />} />
+        
+        <Route path="/carrinho" element={
+          usuario ? (
+            <div className="carrinho-page animacao-entrada">
+              <h2 className="section-title">Seu Carrinho</h2>
+              {carrinho.length === 0 ? (
+                <div className="empty-state"><p>Seu carrinho está vazio 🎮</p><Link to="/">Explorar Jogos</Link></div>
+              ) : (
+                <div className="carrinho-container">
+                  <div className="carrinho-lista">
+                    {carrinho.map((item, i) => (
+                      <div key={i} className="carrinho-item animacao-item" style={{ animationDelay: `${i * 0.1}s` }}>
+                        <img src={item.imagem} alt={item.nome} />
+                        <div className="item-details">
+                          <h4>{item.nome}</h4>
+                          <p>R$ {item.preco.toFixed(2)}</p>
+                        </div>
+                        <button onClick={() => removerItem(i)} className="btn-remover">Remover</button>
                       </div>
                     ))}
+                  </div>
+                  <div className="carrinho-resumo">
+                    <h3>Total: R$ {carrinho.reduce((acc, curr) => acc + curr.preco, 0).toFixed(2)}</h3>
+                    <button onClick={finalizarCompra} className="btn-finalizar">Finalizar Compra</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="login-prompt animacao-entrada">
+              <h2>🔒 Acesso Restrito</h2>
+              <p>Faça login para gerenciar seu carrinho e finalizar compras.</p>
+              <Link to="/login" className="btn-buy-now" style={{textDecoration: 'none', display: 'inline-block', marginTop: '15px'}}>Ir para Login</Link>
+            </div>
+          )
+        } />
 
-                    <h3>Total: R$ {total}</h3>
-
-                    <button onClick={finalizarCompra}>
-                      Ir para pagamento
-                    </button>
-                  </>
-                )}
-              </div>
-            ) : (
-              <div style={{ textAlign: "center", marginTop: "40px" }}>
-                <h2>Você precisa estar logado 🔒</h2>
-                <Link to="/login">Ir para Login</Link>
-              </div>
-            )
-          }
-        />
-
-        <Route path="/como-funciona" element={<ComoFunciona />} />
-        <Route path="/criar-conta" element={<CriarConta criarConta={criarConta} />} />
         <Route path="/login" element={<Login login={login} />} />
-
+        <Route path="/criar-conta" element={<CriarConta criarConta={criarConta} />} />
       </Routes>
     </div>
   );
 }
 
+// COMPONENTE DETALHE
 function ProdutoDetalhe({ produtos, adicionarCarrinho }) {
   const { id } = useParams();
   const produto = produtos.find((p) => p.id === Number(id));
-  if (!produto) return <h2>Produto não encontrado</h2>;
+  if (!produto) return <h2 className="animacao-entrada">Não encontrado</h2>;
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <img src={produto.imagem} width="300" />
-      <h2>{produto.nome}</h2>
-      <p>Preço: R$ {produto.preco}</p>
-      <p>{produto.texto}</p>
+    <div className="product-page-wrapper animacao-entrada">
+      <div className="product-main-grid">
+        <div className="product-visual">
+          <img src={produto.imagem} className="main-img" alt={produto.nome} />
+        </div>
+        
+        <div className="product-purchase-box">
+          <span className="stock-info">82 em estoque</span>
+          <h1>{produto.nome}</h1>
+          <div className="price-tag-section">
+            <span className="old-price">R$ 300,00</span>
+            <span className="discount-badge">95% OFF</span>
+            <div className="main-price">R$ {produto.preco.toFixed(2)}</div>
+            <small>À vista no Pix</small>
+          </div>
+          
+          <div className="product-actions">
+            <button className="btn-buy-now" onClick={() => window.location.href = produto.link}>
+              <FaBasketShopping /> Comprar agora
+            </button>
+            <button className="btn-add-to-cart" onClick={() => adicionarCarrinho(produto)}>
+              <FaPlus /> Adicionar ao carrinho
+            </button>
+          </div>
+        </div>
 
-      <button onClick={() => adicionarCarrinho(produto)}>
-        Adicionar ao Carrinho 🛒
-      </button>
+        <div className="trust-column">
+          <div className="trust-item">
+            <FaRocket className="trust-icon" />
+            <div><strong>Entrega imediata</strong><p>Receba agora após o pagamento.</p></div>
+          </div>
+          <div className="trust-item">
+            <FaShieldAlt className="trust-icon" />
+            <div><strong>Segurança total</strong><p>Dados criptografados.</p></div>
+          </div>
+          <div className="trust-item">
+            <div className="pix-badge">PIX</div>
+            <div><strong>Formas de pagamento</strong><p>Aceitamos os meios mais populares.</p></div>
+          </div>
+        </div>
+      </div>
 
-      <h3 style={{ marginTop: "40px" }}>Avaliações ⭐</h3>
-
-      <p>⭐⭐⭐⭐⭐ Lucas - Recebi o código rápido.</p>
-      <p>⭐⭐⭐⭐⭐ Rafael - Funcionou perfeitamente.</p>
-      <p>⭐⭐⭐⭐ Ana - Ativação rápida.</p>
+      {/* Seção de Descrição idêntica à imagem */}
+      <div className="description-container">
+        <h3>Descrição</h3>
+        <div className="keys-box">
+           <h4><FaKey color="#facc15" /> Sobre as Keys</h4>
+           <p>{produto.texto}</p>
+           
+           <div className="desc-bullets">
+              <p><FaCheckCircle color="#22c55e" /> <strong>Tudo seu:</strong> Salve conquistas e use a nuvem (Cloud) na sua própria conta.</p>
+              <p><FaStar color="#facc15" /> Todas as Keys acompanham todas as DLCS do jogo.</p>
+              <p><FaGlobe color="#3b82f6" /> <strong>Modo Online:</strong> Consulte nosso suporte para saber se o jogo possui essa função.</p>
+           </div>
+        </div>
+      </div>
     </div>
   );
 }
 
-function ComoFunciona() {
+// COMPONENTE LOGIN
+function Login({ login }) {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
   return (
-    <div style={{ textAlign: "center" }}>
-      <h1>Como comprar</h1>
-      <p>1 Escolha o jogo</p>
-      <p>2 Adicione ao carrinho</p>
-      <p>3 Faça o pagamento</p>
-      <p>4 Receba o código digital</p>
-      <p>5 Instala o aplicativo nosso representado no Email cadastrado junto com a chave key e em seguida abre a stema adciona a key no nosso aplicativo e pronto é só jogar bom jogo!</p>
+    <div className="auth-container animacao-entrada">
+      <div className="auth-card">
+        <h2>Login</h2>
+        <p>Acesse sua conta para continuar suas compras.</p>
+        <form onSubmit={(e) => login(e, email, senha)}>
+          <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
+          <input type="password" placeholder="Senha" onChange={(e) => setSenha(e.target.value)} required />
+          <button type="submit" className="btn-auth">Entrar</button>
+        </form>
+        <p className="auth-footer">Não tem uma conta? <Link to="/criar-conta">Crie uma aqui</Link></p>
+      </div>
     </div>
   );
 }
 
+// COMPONENTE CRIAR CONTA
 function CriarConta({ criarConta }) {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h2>Criar Conta</h2>
-
-      <form onSubmit={(e) => criarConta(e, nome, email, senha)}>
-
-        <input placeholder="Nome" onChange={(e) => setNome(e.target.value)} required />
-        <br /><br />
-
-        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
-        <br /><br />
-
-        <input type="password" placeholder="Senha" onChange={(e) => setSenha(e.target.value)} required />
-        <br /><br />
-
-        <button type="submit">Criar Conta</button>
-
-      </form>
-    </div>
-  );
-}
-
-function Login({ login }) {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-
-  return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h2>Login</h2>
-
-      <form onSubmit={(e) => login(e, email, senha)}>
-
-        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
-        <br /><br />
-
-        <input type="password" placeholder="Senha" onChange={(e) => setSenha(e.target.value)} required />
-        <br /><br />
-
-        <button type="submit">Entrar</button>
-
-      </form>
+    <div className="auth-container animacao-entrada">
+      <div className="auth-card">
+        <h2>Criar Conta</h2>
+        <p>Junte-se à TechyDalgo e comece a jogar.</p>
+        <form onSubmit={(e) => criarConta(e, nome, email, senha)}>
+          <input placeholder="Nome" onChange={(e) => setNome(e.target.value)} required />
+          <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
+          <input type="password" placeholder="Senha" onChange={(e) => setSenha(e.target.value)} required />
+          <button type="submit" className="btn-auth">Cadastrar</button>
+        </form>
+        <p className="auth-footer">Já tem conta? <Link to="/login">Faça login</Link></p>
+      </div>
     </div>
   );
 }
