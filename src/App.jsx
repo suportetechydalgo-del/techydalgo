@@ -15,7 +15,6 @@ import forza6 from "./assets/forza6.png";
 import gta5 from "./assets/gta5.png";
 import farming25 from "./assets/farming25.png";
 import gamepass from "./assets/gamepass.png";
-import spiderman2 from "./assets/spiderman2.png";
 
 function App() {
   const [carrinho, setCarrinho] = useState([]);
@@ -45,7 +44,7 @@ function App() {
     },
     {
       id: 2,
-      nome: "Pré-venda Forza Horizon 6",
+      nome: "Pré-vendaForza Horizon 6",
       preco: 30,
       imagem: forza6,
       link: "https://pay.kiwify.com.br/KcN8QnT",
@@ -74,14 +73,6 @@ function App() {
       imagem: gamepass,
       link: "https://kiwify.app/s6lSUqa",
       texto: "Xbox Game Pass Premium Trial - 1 Month - envio automático.",
-    },
-    {
-      id: 6,
-      nome: "Marvel's Spider-Man 2",
-      preco: 25,
-      imagem: spiderman2,
-      link: "https://pay.kiwify.com.br/EJccf0T",
-      texto: "Jogo Marvels Spider-man 2, tenha a cidade de Nova York inteira dentro do jogo"
     },
   ];
 
