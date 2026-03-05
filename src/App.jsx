@@ -15,6 +15,7 @@ import forza6 from "./assets/forza6.png";
 import gta5 from "./assets/gta5.png";
 import farming25 from "./assets/farming25.png";
 import gamepass from "./assets/gamepass.png";
+import spiderman2 from "./assets/spiderman2.png";
 
 function App() {
   const [carrinho, setCarrinho] = useState([]);
